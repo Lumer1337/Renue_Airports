@@ -3,9 +3,9 @@ package org.example;
 import java.util.*;
 
 public class PrefixTree {
-    static class Node {
-        Map<Character, Node> children = new HashMap<>();
-        List<Integer> rowNumbers = new ArrayList<>();
+    private static class Node {
+        private final Map<Character, Node> children = new HashMap<>();
+        private final List<Integer> rowNumbers = new ArrayList<>();
     }
 
     private final Node root;
@@ -15,8 +15,6 @@ public class PrefixTree {
     }
 
     public void insert(String word, int rowNumber) {
-        word = word.intern();
-
         Node current = root;
         for (char c : word.toCharArray()) {
             current.children.putIfAbsent(c, new Node());
@@ -36,14 +34,15 @@ public class PrefixTree {
                 return Collections.emptyList();
             }
         }
-        return collectRows(current);
+        List<Integer> result = new ArrayList<>();
+        collectRows(current, result);
+        return result;
     }
 
-    private List<Integer> collectRows(Node node) {
-        List<Integer> result = new ArrayList<>(node.rowNumbers);
+    private void collectRows(Node node, List<Integer> result) {
+        result.addAll(node.rowNumbers);
         for (Node child : node.children.values()) {
-            result.addAll(collectRows(child));
+            collectRows(child, result);
         }
-        return result;
     }
 }

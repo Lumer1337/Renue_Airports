@@ -3,8 +3,8 @@ package org.example;
 import java.util.List;
 
 public class OutputResult {
-    long initTime;
-    List<SearchResult> results;
+    private final long initTime;
+    private final List<SearchResult> results;
 
     OutputResult(long initTime, List<SearchResult> results) {
         this.initTime = initTime;

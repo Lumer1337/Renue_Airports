@@ -4,16 +4,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class SearchResult {
-    String search;
-    List<Integer> result;
-    long time;
+    private final String search;
+    private final List<Integer> result;
+    private final long time;
 
     SearchResult(String search, List<Integer> result, long time) {
         this.search = search;
         this.result = result;
-        if (result != null) {
-            Collections.sort(result);
-        }
+        Collections.sort(result);
         this.time = time;
     }
 

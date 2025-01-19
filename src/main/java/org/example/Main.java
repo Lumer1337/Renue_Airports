@@ -114,6 +114,9 @@ public class Main {
                 current.append(c);
             }
         }
+        if (insideQuotes) {
+            throw new IllegalArgumentException("Недопустимый формат CSV: несовпадающие кавычки в строке: " + line);
+        }
         result.add(current.toString());
         return result.toArray(new String[0]);
     }
