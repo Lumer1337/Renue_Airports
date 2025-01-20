@@ -7,34 +7,12 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         try {
-            Map<String, String> arguments = parseArguments(args);
+            ArgumentValidator validator = new ArgumentValidator(args);
 
-            String dataFile = arguments.get("--data");
-            if (dataFile == null) {
-                throw new IllegalArgumentException("Ошибка: --data не указано");
-            }
-
-            String inputFile = arguments.get("--input-file");
-            if (inputFile == null) {
-                throw new IllegalArgumentException("Ошибка: --input-file не указано");
-            }
-
-            String outputFile = arguments.get("--output-file");
-            if (outputFile == null) {
-                throw new IllegalArgumentException("Ошибка: --output-file не указано");
-            }
-
-            String columnIndexStr = arguments.get("--indexed-column-id");
-            if (columnIndexStr == null) {
-                throw new IllegalArgumentException("Ошибка: --indexed-column-id не указано");
-            }
-
-            int columnIndex;
-            try {
-                columnIndex = Integer.parseInt(columnIndexStr) - 1;
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Неверное значение для --indexed-column-id");
-            }
+            String dataFile = validator.getRequiredArgument("--data");
+            String inputFile = validator.getRequiredArgument("--input-file");
+            String outputFile = validator.getRequiredArgument("--output-file");
+            int columnIndex = validator.getRequiredIntArgument("--indexed-column-id") - 1;
 
             long startTime = System.nanoTime();
             PrefixTree prefixTree = new PrefixTree();
@@ -59,18 +37,6 @@ public class Main {
             System.err.println("Ошибка: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    private static Map<String, String> parseArguments(String[] args) {
-        if (args.length % 2 != 0) {
-            throw new IllegalArgumentException("Аргументы должны быть в виде пар ключ-значение");
-        }
-
-        Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < args.length; i += 2) {
-            map.put(args[i], args[i + 1]);
-        }
-        return map;
     }
 
     private static List<String> readLines(String filePath) throws IOException {
